@@ -13,12 +13,12 @@
 
     <div class="wishlist-place">
 
-        <span class="place-name">{{ place.name }}</span>
+        <span id="place-name-{{ place.pk }}" class="place-name">{{ place.name }}</span>
 
         <form class="visited-form" method="POST" action="{% url 'place_was_visited' %}">
             {% csrf_token %}
             <input type="hidden" name="pk" value="{{ place.pk }}">
-            <button type="submit">Visited!</button>
+            <button id="visited-button-{{ place.pk }}" type="submit">Visited!</button>
         </form>
 
     </div>

@@ -1,0 +1,31 @@
+[
+    { "model":"travel_wishlist.place",
+      "pk":1,
+      "fields":{
+        "name":"Tokyo",
+        "visited":"False"
+      }
+    },
+    { "model":"travel_wishlist.place",
+      "pk":2,
+      "fields":{
+        "name":"New York",
+        "visited":"False"
+      }
+    },
+    { "model":"travel_wishlist.place",
+      "pk":3,
+      "fields":{
+        "name":"San Francisco",
+        "visited":"True"
+      }
+    },
+  
+    { "model":"travel_wishlist.place",
+      "pk":4,
+      "fields":{
+        "name":"Moab",
+        "visited":"True"
+      }
+    }
+  ]
