@@ -1,0 +1,30 @@
+<h2>Travel Wishlist</h2>
+
+<form method="POST" action="{% url 'place_list' %}">
+    {% csrf_token %}
+    {{ new_place_form }}
+    <button type="submit">Add</button>
+</form>
+
+{% for place in places %}
+
+    <div>
+        {{ place.name }}
+
+        <form method="POST" action="{% url 'place_was_visited' %}">
+            {% csrf_token %}
+            <input type="hidden" name="pk" value="{{ place.pk }}">
+            <button type="submit">Visited!</button>
+        </form>
+
+    </div>
+
+{% empty %}
+
+    <p>You have no places in your wishlist</p>
+
+{% endfor %}
+
+<a href="{% url 'places_visited' %}">Places you've visited</a>
+
+
