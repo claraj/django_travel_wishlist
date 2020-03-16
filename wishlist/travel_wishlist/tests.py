@@ -100,3 +100,34 @@ class TestAddNewPlace(TestCase):
         # the values expected. Will throw an exception if no data, or more than
         # one row, matches. Remember throwing an exception will cause this test to fail
         place_in_database = Place.objects.get(name="Tokyo", visited=True)
+
+
+
+class TestVisitPlace(TestCase):
+
+    fixtures = ['test_places']
+
+    def test_visit_place(self):
+
+        # visit place pk = 2 ,  New York
+      
+        response = self.client.post(reverse('place_was_visited', args=(2,) ), follow=True)
+
+        # Check correct template was used
+        self.assertTemplateUsed(response, 'travel_wishlist/wishlist.html')
+
+        # no New York in the response
+        self.assertNotContains(response, "New York")
+
+        # Is New York visited?
+        new_york = Place.objects.get(pk=2)
+
+        self.assertTrue(new_york.visited)
+
+    def test_visit_non_existent_place(self):
+
+        # visit place pk = 200 
+      
+        response = self.client.post(reverse('place_was_visited', args=(200,) ), follow=True)
+
+        self.assertEqual(response.status_code, 404)  # not found
