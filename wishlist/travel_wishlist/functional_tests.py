@@ -10,7 +10,7 @@ from django.test import LiveServerTestCase
 class TitleTest(LiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Chrome()  # Change to .Firefox() if using Firefox
+        self.browser = webdriver.Firefox()  # Change to .Chrome() if using Chrome
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
@@ -18,7 +18,7 @@ class TitleTest(LiveServerTestCase):
 
     def test_title_shown_on_home_page(self):
         self.browser.get(self.live_server_url)
-        assert 'Travel Wishlist' in self.browser.title
+        self.assertIn(self.browser.title, 'Travel Wishlist')
 
 
 
@@ -27,7 +27,7 @@ class AddEditPlacesTests(LiveServerTestCase):
     fixtures = ['test_places']
 
     def setUp(self):
-        self.browser = webdriver.Chrome()  
+        self.browser = webdriver.Firefox()  
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
@@ -46,12 +46,11 @@ class AddEditPlacesTests(LiveServerTestCase):
         wait_for_denver = self.browser.find_element_by_id('place-name-5')
 
         # Assert places from test_places are on page
-        assert 'Tokyo' in self.browser.page_source
-        assert 'New York' in self.browser.page_source
+        self.assertIn('Tokyo', self.browser.page_source)
+        self.assertIn('New York', self.browser.page_source)
 
         # And the new place too
-        assert 'Denver' in self.browser.page_source
-
+        self.assertIn('Denver', self.browser.page_source)
 
     def test_mark_place_as_visited(self):
 
@@ -76,21 +75,21 @@ class AddEditPlacesTests(LiveServerTestCase):
         ny_has_gone = wait.until(EC.invisibility_of_element_located((By.ID, 'place-name-2')))
 
         # Assert Tokyo is still on page
-        assert 'Tokyo' in self.browser.page_source
-
+        self.assertIn('Tokyo', self.browser.page_source)
+    
         # But New York is not
-        assert 'New York' not in self.browser.page_source
+        self.assertNotIn('New York', self.browser.page_source)
 
         # Load visited page
         self.browser.get(self.live_server_url + '/visited')
 
         # New York should be on the visited page
-        assert 'New York' in self.browser.page_source
+        self.assertIn('New York', self.browser.page_source)
 
         # As well as our other visited places
-        assert 'San Francisco' in self.browser.page_source
-        assert 'Moab' in self.browser.page_source
-
+     
+        self.assertIn('San Francisco', self.browser.page_source)
+        self.assertIn('Moab', self.browser.page_source)
 
 
 class PageContentTests(LiveServerTestCase):
@@ -98,7 +97,7 @@ class PageContentTests(LiveServerTestCase):
     fixtures = ['test_places']
 
     def setUp(self):
-        self.browser = webdriver.Chrome()  
+        self.browser = webdriver.Firefox()  
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
@@ -107,18 +106,22 @@ class PageContentTests(LiveServerTestCase):
     def test_get_home_page_list_of_places(self):
 
         self.browser.get(self.live_server_url)
-        assert 'Tokyo' in self.browser.page_source
-        assert 'New York' in self.browser.page_source
-        assert 'San Francisco' not in self.browser.page_source
-        assert 'Moab' not in self.browser.page_source
+
+        self.assertIn('Tokyo', self.browser.page_source)
+        self.assertIn('New York', self.browser.page_source)
+
+        self.assertNotIn('San Francisco', self.browser.page_source)
+        self.assertNotIn('Moab', self.browser.page_source)
+
 
 
     def test_get_list_of_visited_places(self):
 
         self.browser.get(self.live_server_url + '/visited')
-        assert 'Wishlist' in self.browser.title
-        assert 'Tokyo' not in self.browser.page_source
-        assert 'New York' not in self.browser.page_source
-        assert 'San Francisco' in self.browser.page_source
-        assert 'Moab' in self.browser.page_source
+    
+        self.assertNotIn('Tokyo', self.browser.page_source)
+        self.assertNotIn('New York', self.browser.page_source)
+
+        self.assertIn('San Francisco', self.browser.page_source)
+        self.assertIn('Moab', self.browser.page_source)
 
