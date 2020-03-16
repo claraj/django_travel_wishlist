@@ -1,5 +1,5 @@
 Django==3.0.4
-pytz==2019.2
+pytz==2019.3
 selenium==3.141.0
-sqlparse==0.3.0
-urllib3==1.25.6
+sqlparse==1.0.0
+urllib3==1.25.8
