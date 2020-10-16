@@ -19,7 +19,7 @@
     "model": "travel_wishlist.place",
     "pk": 3,
     "fields": {
-      "name": "San Francisco",
+      "name": "San Francisco", 
       "visited": "True"
     }
   },
