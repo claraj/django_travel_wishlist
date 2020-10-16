@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from django.test import LiveServerTestCase
 
+from .models import Place
 
 class TitleTest(LiveServerTestCase):
 
@@ -50,16 +51,22 @@ class AddPlacesTests(LiveServerTestCase):
         add_button = self.selenium.find_element_by_id('add-new-place')  # Find the add button
         add_button.click()      # And click it
 
-        # Got to make this test code wait for the server to process the request and for page to reload 
-        # Wait for new element to appear on page
-        self.selenium.find_element_by_id('place-name-5')
+        # Expect new element to appear on page. Is the text 'Denver'?
+        denver = self.selenium.find_element_by_id('place-name-5')
+        self.assertEqual('Denver', denver.text)
+
+        # Another way to check for text on a page - more general
+        self.assertIn('Denver', self.selenium.page_source)
 
         # Assert places from test_places are on page
         self.assertIn('Tokyo', self.selenium.page_source)
         self.assertIn('New York', self.selenium.page_source)
 
-        # And the new place too
-        self.assertIn('Denver', self.selenium.page_source)
+        # as well as checking the user interface, can check the database too
+        # this will error if Denver, pk=5 isn't there 
+        denver_db = Place.objects.get(pk=5)
+        self.assertEqual('Denver', denver_db.name)
+        self.assertFalse(denver_db.visited)
 
 
 
@@ -114,9 +121,12 @@ class EditPlacesTests(LiveServerTestCase):
         self.assertIn('New York', self.selenium.page_source)
 
         # As well as our other visited places
-     
         self.assertIn('San Francisco', self.selenium.page_source)
         self.assertIn('Moab', self.selenium.page_source)
+
+        # And let's verify the database is updated - New York visited is True
+        new_york = Place.objects.get(pk=2)
+        self.assertTrue(new_york.visited)
 
 
 class PageContentTests(LiveServerTestCase):
