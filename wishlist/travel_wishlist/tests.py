@@ -123,7 +123,6 @@ class TestVisitPlace(TestCase):
     def test_visit_place(self):
 
         # visit place pk = 2,  New York
-    
         visit_place_url = reverse('place_was_visited', args=(2, ))
         response = self.client.post(visit_place_url, follow=True)
 
@@ -141,6 +140,10 @@ class TestVisitPlace(TestCase):
 
     def test_visit_non_existent_place(self):
 
-        # visit place pk = 200 
-        response = self.client.post(reverse('place_was_visited', args=(200,) ), follow=True)
+        # visit place with pk = 200, this PK is not in the fixtures 
+        visit_place_url = reverse('place_was_visited', args=(200, ))
+        response = self.client.post(visit_place_url, follow=True)
         self.assertEqual(404, response.status_code)  # not found
+
+
+
